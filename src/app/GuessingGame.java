@@ -14,6 +14,7 @@ import javax.persistence.Query;
 import javax.swing.DefaultComboBoxModel;
 import model.Category;
 import model.WordModel;
+import model.WorkQuestionGenerator;
 
 /**
  *
@@ -25,12 +26,12 @@ public class GuessingGame extends javax.swing.JFrame {
     WordModel modelWord;
     List<WordModel> bankSoal;
     List<Category> wm;
+    WorkQuestionGenerator a = new WorkQuestionGenerator();
     
     /**
      * Creates new form GuessingGame
      */
     public GuessingGame() {
-        emf = Persistence.createEntityManagerFactory("GameGuessAWordDatabasePU");
         initComponents();
         //showCategory();
     }
@@ -174,15 +175,15 @@ public class GuessingGame extends javax.swing.JFrame {
 
     
     
-    private List<Category> getCategory() {
-        EntityManager em = emf.createEntityManager();
-        Query query = em.createQuery("SELECT c FROM Category c");
-        wm = query.getResultList();
-        
-        return wm;
-    }
+//    private List<Category> getCategory() {
+//        EntityManager em = emf.createEntityManager();
+//        Query query = em.createQuery("SELECT c FROM Category c");
+//        wm = query.getResultList();
+//        
+//        return wm;
+//    }
     
-    //CARA PERTAMA dapetin category
+    //CARA PERTAMA dapetin category dan sebelum dipindahin ke kelas workquestiongenerator
 //    
 //    private void showCategory(){
 //        getCategory();
@@ -192,39 +193,27 @@ public class GuessingGame extends javax.swing.JFrame {
 //        
 //    }
     
-    //CARA Kedua dapetin category
-    private String[] showCategory() {
-        List<Category> cat = getCategory();
-        int size = cat.size();
-        String namaCategory[] = new String[size];
-        for (int i = 0; i < size; i++) {
-            namaCategory[i] = cat.get(i).getName();
-        }
-        System.out.println("Jumlah kategori: " + size);
-        
-        return namaCategory;
-    }
+//    //CARA Kedua dapetin category dan sebelum dipindahin ke kelas workquestiongenerator
+//    private String[] showCategory() {
+//        List<Category> cat = getCategory();
+//        int size = cat.size();
+//        String namaCategory[] = new String[size];
+//        for (int i = 0; i < size; i++) {
+//            namaCategory[i] = cat.get(i).getName();
+//        }
+//        System.out.println("Jumlah kategori: " + size);
+//        
+//        return namaCategory;
+//    }
     
     private DefaultComboBoxModel getModel(){
-        return new DefaultComboBoxModel(showCategory());
+        return new DefaultComboBoxModel(a.showCategory());
     }
-    
-    private void getSoal() {
-        EntityManager em = emf.createEntityManager();
-        String kata = (String) cb_Kategori.getSelectedItem();
-        Query query = em.createQuery("SELECT w FROM Category w WHERE w.name = :categoryName");
-        query.setParameter("categoryName", kata);
-        Category c = (Category) query.getSingleResult();
-        bankSoal = c.getWordModels();
-        em.close();
-    }
-    
-
     
 
     private void btn_MulaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_MulaiActionPerformed
-
-        getSoal();
+        bankSoal = a.getSoal((String) cb_Kategori.getSelectedItem());
+        
         int soalIndex = (int) Math.floor(Math.random() * bankSoal.size());
         modelWord = bankSoal.get(soalIndex);
         tf_Soal.setText(modelWord.acakHuruf());
