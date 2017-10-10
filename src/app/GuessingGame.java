@@ -216,6 +216,7 @@ public class GuessingGame extends javax.swing.JFrame {
         query.setParameter("categoryName", kata);
         Category c = (Category) query.getSingleResult();
         bankSoal = c.getWordModels();
+        em.close();
     }
     
 
