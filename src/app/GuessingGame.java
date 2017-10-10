@@ -25,7 +25,6 @@ public class GuessingGame extends javax.swing.JFrame {
     WordModel modelWord;
     List<WordModel> bankSoal;
     List<Category> wm;
-    Long idCateg;
     
     /**
      * Creates new form GuessingGame
@@ -210,27 +209,21 @@ public class GuessingGame extends javax.swing.JFrame {
         return new DefaultComboBoxModel(showCategory());
     }
     
-    private Long getSoal() {
+    private void getSoal() {
         EntityManager em = emf.createEntityManager();
         String kata = (String) cb_Kategori.getSelectedItem();
         Query query = em.createQuery("SELECT w FROM Category w WHERE w.name = :categoryName");
         query.setParameter("categoryName", kata);
         Category c = (Category) query.getSingleResult();
-        idCateg = c.getId();
-        
-        return idCateg;
-    }
-    
-    private void showSoal(){
-        EntityManager em = emf.createEntityManager();
-        Category c = em.find(Category.class, getSoal());
-        
         bankSoal = c.getWordModels();
     }
     
 
+    
+
     private void btn_MulaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_MulaiActionPerformed
-        showSoal();
+
+        getSoal();
         int soalIndex = (int) Math.floor(Math.random() * bankSoal.size());
         modelWord = bankSoal.get(soalIndex);
         tf_Soal.setText(modelWord.acakHuruf());
