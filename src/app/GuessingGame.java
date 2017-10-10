@@ -12,6 +12,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import model.Category;
 import model.WordModel;
 import model.WorkQuestionGenerator;
@@ -22,10 +23,10 @@ import model.WorkQuestionGenerator;
  */
 public class GuessingGame extends javax.swing.JFrame {
     
-    EntityManagerFactory emf;
+//    EntityManagerFactory emf;
     WordModel modelWord;
     List<WordModel> bankSoal;
-    List<Category> wm;
+//    List<Category> wm;
     WorkQuestionGenerator a = new WorkQuestionGenerator();
     
     /**
@@ -212,6 +213,7 @@ public class GuessingGame extends javax.swing.JFrame {
     
 
     private void btn_MulaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_MulaiActionPerformed
+        try{
         bankSoal = a.getSoal((String) cb_Kategori.getSelectedItem());
         
         int soalIndex = (int) Math.floor(Math.random() * bankSoal.size());
@@ -221,7 +223,9 @@ public class GuessingGame extends javax.swing.JFrame {
         tf_Jawaban.setText("");
         bantuan.setText("");
         keteranganJawaban.setText("Belum ada jawaban");
-        
+        }catch(ArrayIndexOutOfBoundsException a){
+            JOptionPane.showMessageDialog(this, "Belum ada data!");
+        }
 
     }//GEN-LAST:event_btn_MulaiActionPerformed
 
